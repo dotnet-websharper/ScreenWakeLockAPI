@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Screen Wake Lock API Sample</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/WebSharper.ScreenWakeLock.Sample.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+    </style>
+    <script type="text/javascript" src="Content/WebSharper.ScreenWakeLock.Sample.head.js"></script>
+</head>
+<body>
+    <h1>Screen Wake Lock API</h1>
+    <div id="main" ws-children-template="Main">
+        <button ws-onclick="wakeButton">Enable Wake Lock</button>
+        <p id="status">${Status}</p>
+    </div>
+    <script type="text/javascript" src="Content/WebSharper.ScreenWakeLock.Sample.min.js"></script>
+</body>
+</html>
