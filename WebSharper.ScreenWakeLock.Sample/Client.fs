@@ -18,7 +18,7 @@ module Client =
 
     let requestWakeLock() = promise {
         try
-            let! wakelock = As<Navigator>(JS.Window.Navigator).WakeLock.Request("screen")
+            let! wakelock = JS.Window.Navigator.WakeLock.Request("screen")
 
             statusMessage := "Screen Wake Lock is active!"
 

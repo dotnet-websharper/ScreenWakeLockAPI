@@ -81,7 +81,7 @@ module Client =
     let requestWakeLock() = promise {
         try
             // Request a wake lock to prevent the screen from dimming or locking
-            let! wakelock = As<Navigator>(JS.Window.Navigator).WakeLock.Request("screen")
+            let! wakelock = JS.Window.Navigator.WakeLock.Request("screen")
 
             // Update status message when wake lock is active
             statusMessage := "Screen Wake Lock is active!"

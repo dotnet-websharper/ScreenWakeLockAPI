@@ -27,16 +27,9 @@ module Definition =
             "request" => T<string>?``type`` ^-> T<Promise<_>>[WakeLockSentinel]
         ]
 
-    let Navigator = 
-        Class "Navigator" 
-        |+> Instance [
-            "wakeLock" =? WakeLock
-        ]
-
     let Assembly =
         Assembly [
             Namespace "WebSharper.ScreenWakeLock" [
-                Navigator
                 WakeLockSentinel
                 WakeLock
             ]
