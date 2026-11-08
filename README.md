@@ -22,7 +22,7 @@ This repository contains:
 
 ![Screen Wake Lock API sample](docs/sample.png)
 
-The sample doubles as the binding's test case: it requests a screen wake lock and listens for its release event in a real browser.
+The sample doubles as the binding's [test case](#running-the-sample): it requests a screen wake lock and listens for its release event in a real browser.
 
 - **Sample (this repository):** <https://dotnet-websharper.github.io/ScreenWakeLockAPI/>
 - **Source repository:** <https://github.com/dotnet-websharper/ScreenWakeLockAPI>
