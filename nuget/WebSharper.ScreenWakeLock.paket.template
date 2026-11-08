@@ -1,0 +1,22 @@
+type file
+id WebSharper.ScreenWakeLock
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+repositoryType git
+repositoryUrl https://github.com/dotnet-websharper/ScreenWakeLockAPI/
+licenseUrl https://github.com/dotnet-websharper/ScreenWakeLockAPI/blob/main/LICENSE.md
+iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
+projectUrl https://github.com/dotnet-websharper/ScreenWakeLockAPI
+description
+    WebSharper bindings for ScreenWakeLock
+tags
+    Web JavaScript F# C#
+files
+    ../WebSharper.ScreenWakeLock.Extensions/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.ScreenWakeLock.Extensions/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.Extensions.xml ==> lib/netstandard2.0
+    ../WebSharper.ScreenWakeLock/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.dll ==> lib/netstandard2.0
+    ../WebSharper.ScreenWakeLock/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper ~> LOCKEDVERSION:[3]
