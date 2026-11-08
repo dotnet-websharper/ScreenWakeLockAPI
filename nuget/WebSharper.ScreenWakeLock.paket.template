@@ -15,8 +15,10 @@ tags
     Web JavaScript F# C#
 files
     ../WebSharper.ScreenWakeLock.Extensions/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.ScreenWakeLock.Extensions/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.Extensions.websharper ==> lib/netstandard2.0
     ../WebSharper.ScreenWakeLock.Extensions/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.Extensions.xml ==> lib/netstandard2.0
     ../WebSharper.ScreenWakeLock/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.dll ==> lib/netstandard2.0
+    ../WebSharper.ScreenWakeLock/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.websharper ==> lib/netstandard2.0
     ../WebSharper.ScreenWakeLock/bin/Release/netstandard2.0/WebSharper.ScreenWakeLock.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
