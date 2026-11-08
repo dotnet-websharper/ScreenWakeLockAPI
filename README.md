@@ -1,121 +1,138 @@
-# WebSharper Screen Wake Lock API Binding
+# WebSharper.ScreenWakeLock
 
-This repository provides an F# [WebSharper](https://websharper.com/) binding for the [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API), enabling WebSharper applications to prevent the screen from dimming or locking while in use.
+[![NuGet](https://img.shields.io/badge/nuget-not%20published-lightgrey)](https://github.com/dotnet-websharper/ScreenWakeLockAPI)
 
-## Repository Structure
+WebSharper bindings for the [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) —
+keeping the screen from dimming or locking while the page is in use.
 
-The repository consists of two main projects:
+The Screen Wake Lock API is only available in [secure contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts)
+(HTTPS or localhost), and the user must trigger it with a gesture.
 
-1. **Binding Project**:
+This repository contains:
 
-   - Contains the F# WebSharper binding for the Screen Wake Lock API.
+| Project | Purpose |
+| --- | --- |
+| `WebSharper.ScreenWakeLock` | The binding: WIG definitions for `WakeLock` and `WakeLockSentinel`. |
+| `WebSharper.ScreenWakeLock.Extensions` | `[<Inline>]` client extensions: `navigator.wakeLock` on `Navigator`. |
+| `WebSharper.ScreenWakeLock.Sample` | An ASP.NET Core SPA that requests a screen wake lock and reports its state. |
 
-2. **Sample Project**:
-   - Demonstrates how to use the Screen Wake Lock API with WebSharper syntax.
-   - Includes a GitHub Pages demo: [View Demo](https://dotnet-websharper.github.io/ScreenWakeLockAPI/).
+## Live demos
+
+**Try it live:** [Open the sample in your browser](https://dotnet-websharper.github.io/ScreenWakeLockAPI/)
+
+![Screen Wake Lock API sample](docs/sample.png)
+
+The sample doubles as the binding's test case: it requests a screen wake lock and listens for its release event in a real browser.
+
+- **Sample (this repository):** <https://dotnet-websharper.github.io/ScreenWakeLockAPI/>
+- **Source repository:** <https://github.com/dotnet-websharper/ScreenWakeLockAPI>
+- **WebSharper bindings:** <https://websharper.com/bindings>
+
+## Features
+
+- `WakeLock` (`request`).
+- `WakeLockSentinel` (`released`, `type`, `release`, `onrelease`).
+- `navigator.wakeLock` on `Navigator` in the Extensions assembly.
 
 ## Installation
 
-To use this package in your WebSharper project, add the NuGet package:
+The binding is not currently published to NuGet. Reference the projects from source:
 
 ```bash
-   dotnet add package WebSharper.ScreenWakeLock
+git clone https://github.com/dotnet-websharper/ScreenWakeLockAPI.git
 ```
 
-## Building
+```xml
+<ItemGroup>
+  <ProjectReference Include="path/to/WebSharper.ScreenWakeLock/WebSharper.ScreenWakeLock.fsproj" />
+  <ProjectReference Include="path/to/WebSharper.ScreenWakeLock.Extensions/WebSharper.ScreenWakeLock.Extensions.fsproj" />
+</ItemGroup>
+```
 
-### Prerequisites
-
-- [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
-
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/dotnet-websharper/ScreenWakeLock.git
-   cd ScreenWakeLock
-   ```
-
-2. Build the Binding Project:
-
-   ```bash
-   dotnet build WebSharper.ScreenWakeLock/WebSharper.ScreenWakeLock.fsproj
-   ```
-
-3. Build and Run the Sample Project:
-
-   ```bash
-   cd WebSharper.ScreenWakeLock.Sample
-   dotnet build
-   dotnet run
-   ```
-
-4. Open the hosted demo to see the Sample project in action:
-   [https://dotnet-websharper.github.io/ScreenWakeLockAPI/](https://dotnet-websharper.github.io/ScreenWakeLockAPI/)
-
-## Example Usage
-
-Below is an example of how to use the Screen Wake Lock API in a WebSharper project:
+## Usage
 
 ```fsharp
-namespace WebSharper.ScreenWakeLock.Sample
+namespace WebSharper.ScreenWakeLock.Demo
 
 open WebSharper
 open WebSharper.JavaScript
-open WebSharper.UI
-open WebSharper.UI.Notation
-open WebSharper.UI.Client
-open WebSharper.UI.Templating
 open WebSharper.ScreenWakeLock
 
 [<JavaScript>]
-module Client =
-    // The templates are loaded from the DOM, so you can edit index.html
-    // and refresh your browser without recompiling unless you add or remove holes.
-    type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
-
-    // Variable to store the wake lock status message
-    let statusMessage = Var.Create "Click the button to keep the screen awake."
-
-    let requestWakeLock() = promise {
-        try
-            // Request a wake lock to prevent the screen from dimming or locking
-            let! wakelock = JS.Window.Navigator.WakeLock.Request("screen")
-
-            // Update status message when wake lock is active
-            statusMessage := "Screen Wake Lock is active!"
-
-            // Listen for the release event and update status
-            wakelock.AddEventListener("release", fun (evt: Dom.Event) ->
-                statusMessage := "Wake Lock released!"
-            )
-        with error ->
-            // Handle errors and display the failure message
-            statusMessage := $"Wake Lock Error: {error.Message}"
-    }
-
-    [<SPAEntryPoint>]
-    let Main () =
-
-        IndexTemplate.Main()
-            // Bind the status message to the UI
-            .Status(statusMessage.V)
-            // Attach event handler to the wake lock button
-            .wakeButton(fun _ ->
-                async {
-                    do! requestWakeLock().AsAsync()
-                }
-                |> Async.Start
-            )
-            .Doc()
-        |> Doc.RunById "main"
+module Demo =
+    let requestWakeLock () =
+        promise {
+            let! sentinel = JS.Window.Navigator.WakeLock.Request("screen")
+            sentinel.OnRelease <- fun _ -> Console.Log("Wake lock released")
+        }
 ```
 
-This example demonstrates how to request and handle the Screen Wake Lock API using WebSharper.
+The `navigator.wakeLock` accessor is declared in the Extensions assembly and hangs off `JS.Window.Navigator`.
+`request()` returns a `Promise<WakeLockSentinel>`; `release()` releases the lock and `onrelease` fires when it is released.
 
-## Important Considerations
+## Running the sample
 
-- **User Interaction Required**: Most browsers require user interaction before enabling wake locks.
-- **Limited Browser Support**: Some browsers do not fully support the Screen Wake Lock API; check [MDN Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) for the latest compatibility information.
-- **Battery Consumption**: Using wake locks can impact battery life, so they should be released when no longer needed.
+Build the sample in Release and serve its static output:
+
+```bash
+dotnet build WebSharper.ScreenWakeLock.Sample/WebSharper.ScreenWakeLock.Sample.fsproj -c Release
+python3 -m http.server -d WebSharper.ScreenWakeLock.Sample/wwwroot 8203
+```
+
+Open <http://localhost:8203/>. Localhost counts as a secure context, so the Screen Wake Lock API is available.
+
+Alternatively, run the ASP.NET Core host:
+
+```bash
+dotnet run --project WebSharper.ScreenWakeLock.Sample
+```
+
+## Building from source
+
+### Prerequisites
+
+- [.NET SDK 10](https://dotnet.microsoft.com/download) or later.
+
+### Build
+
+```bash
+dotnet build WebSharper.ScreenWakeLock.sln -c Release
+```
+
+The binding projects target `netstandard2.0`; the sample targets `net10.0`.
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/ghpages.yml`, which builds the sample in Release and publishes
+`WebSharper.ScreenWakeLock.Sample/wwwroot` to the `gh-pages` branch.
+
+## Repository layout
+
+```
+WebSharper.ScreenWakeLock/              # binding (WIG definitions)
+  Main.fs
+WebSharper.ScreenWakeLock.Extensions/   # [<Inline>] client extensions
+  Library.fs
+WebSharper.ScreenWakeLock.Sample/       # ASP.NET Core SPA demo
+  Client.fs
+  Startup.fs
+  wwwroot/
+    index.html
+    site.css
+.github/workflows/ghpages.yml           # build + deploy the sample to GitHub Pages
+```
+
+## Notes on the API
+
+- **Secure context:** the Screen Wake Lock API is only exposed in secure contexts. Serve the page over HTTPS or
+  from localhost.
+- **User gesture:** the request must come from a user gesture (for example, a button click).
+- **Battery:** a wake lock keeps the screen awake and can drain the battery. Release it when the page is no longer
+  visible.
+- **Visibility:** the lock is released automatically when the page becomes hidden. Re-request it when the page is
+  visible again.
+- **Browser support:** support varies by browser. Check the MDN compatibility table before relying on it.
+
+## License
+
+Apache 2.0 — see [LICENSE.md](LICENSE.md).

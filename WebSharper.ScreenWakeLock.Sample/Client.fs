@@ -30,7 +30,7 @@ module Client =
     [<SPAEntryPoint>]
     let Main () =
 
-        IndexTemplate.Main()
+        IndexTemplate()
             .Status(statusMessage.V)
             .wakeButton(fun _ -> 
                 async {
@@ -38,5 +38,4 @@ module Client =
                 }
                 |> Async.Start
             )
-            .Doc()
-        |> Doc.RunById "main"
+            .Bind()
