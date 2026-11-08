@@ -1,22 +1,34 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Screen Wake Lock API Sample</title>
+    <title>WebSharper Screen Wake Lock API Demo</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234f46e5'/%3E%3Crect x='3' y='3' width='10' height='7' rx='1.5' fill='white'/%3E%3Cpath d='M7 11h2v2H7z' fill='white'/%3E%3C/svg%3E" />
     <link rel="stylesheet" type="text/css" href="Content/WebSharper.ScreenWakeLock.Sample.css" />
-    <style>
-        /* Don't show the not-yet-loaded templates */
-        [ws-template], [ws-children-template] { display: none; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="site.css" />
     <script type="module" src="Content/WebSharper.ScreenWakeLock.Sample.head.js"></script>
 </head>
 <body>
-    <h1>Screen Wake Lock API</h1>
-    <div id="main" ws-children-template="Main">
-        <button ws-onclick="wakeButton">Enable Wake Lock</button>
-        <p id="status">${Status}</p>
-    </div>
+    <main class="page">
+        <header class="hero">
+            <h1>Screen Wake Lock API Demo</h1>
+            <p class="lede">
+                Keep the screen from dimming or locking with the
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API" target="_blank" rel="noreferrer">Screen Wake Lock API</a>.
+                The page must run in a secure context (HTTPS or localhost).
+            </p>
+        </header>
+
+        <section class="card">
+            <h2>Wake lock</h2>
+            <p class="hint">Uses <code>navigator.wakeLock.request("screen")</code> and listens for its release event.</p>
+            <div class="actions">
+                <button class="btn btn-primary" ws-onclick="wakeButton">Enable wake lock</button>
+            </div>
+            <p class="status" role="status">${Status}</p>
+        </section>
+    </main>
     <script type="module" src="Content/WebSharper.ScreenWakeLock.Sample.min.js"></script>
 </body>
 </html>
